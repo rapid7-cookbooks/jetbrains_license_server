@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd"
+       default-autowire="byType"
+        >
+    <bean id="mappings" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <!-- EMBEDDED DB -->
+        <property name="driverClassName" value="org.apache.derby.jdbc.EmbeddedDriver"/>
+        <property name="url"
+          value="jdbc:derby:${catalina.home}/<%= @derby_dir %>/db;create=true;dataEncryption=true;bootPassword=${boot.password}"/>
+
+        <!-- MYSQL -->
+        <!--<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value=""/>
+        <property name="username" value="lcsrvtest"/>
+        <property name="password" value=""/>
+        <property name="defaultTransactionIsolation" value="8"/>-->
+
+        <!-- SYBASE -->
+        <!--<property name="driverClassName" value="net.sourceforge.jtds.jdbc.Driver"/>
+      <property name="url" value="jdbc:jtds:sybase://server:port/db"/>
+      <property name="username" value="user"/>
+      <property name="password" value="password"/>
+      <property name="poolPreparedStatements" value="false"/>-->
+    </bean>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="jpaVendorAdapter">
+            <bean class="com.jetbrains.licenseServer.model.impl.LSTopLinkJpaVendorAdapter">
+
+                <!-- EMBEDDED DB -->
+                <property name="databasePlatform" value="oracle.toplink.essentials.platform.database.DerbyPlatform"/>
+
+                <!-- MYSQL -->
+                <!--<property name="databasePlatform" value="oracle.toplink.essentials.platform.database.MySQL4Platform"/>-->
+
+                <!-- SYBASE -->
+                <!--<property name="databasePlatform" value="oracle.toplink.essentials.platform.database.SybasePlatform"/>-->
+                <property name="generateDdl" value="true"/>
+                <property name="showSql" value="false"/>
+            </bean>
+        </property>
+        <property name="jpaPropertyMap">
+            <map>
+                <entry key="toplink.weaving" value="false"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="migrationManager" class="com.jetbrains.licenseServer.model.impl.MigrationManager">
+        <property name="migrations">
+            <list>
+                <bean class="com.jetbrains.licenseServer.model.impl.migrations.AddDisplayKeyMigration"/>
+                <bean class="com.jetbrains.licenseServer.model.impl.migrations.UpdateDisplayKeyMigration"/>
+                <bean class="com.jetbrains.licenseServer.model.impl.migrations.AddLicenseKeyMessagesMigration"/>
+                <bean class="com.jetbrains.licenseServer.model.impl.migrations.AddTicketEditionMigration"/>
+                <bean class="com.jetbrains.licenseServer.model.impl.migrations.AddRequestorNameMigration"/>
+                <bean class="com.jetbrains.licenseServer.model.impl.migrations.AddTicketPropertiesMigration"/>
+                <bean class="com.jetbrains.licenseServer.model.impl.migrations.AddPermanentTicketFields"/>
+                <bean class="com.jetbrains.licenseServer.model.impl.migrations.RemoveDisplayKeyMigration"/>
+                <bean class="com.jetbrains.licenseServer.model.impl.migrations.AddAcquireCountMigration"/>
+                <bean class="com.jetbrains.licenseServer.model.impl.migrations.RemoveTicketsMigration"/>
+                <bean class="com.jetbrains.licenseServer.model.impl.migrations.AddUnlimitedSupportMigration"/>
+                <bean class="com.jetbrains.licenseServer.model.impl.migrations.IncreaseLicenseKeySizeMigration"/>
+                <bean class="com.jetbrains.licenseServer.model.impl.migrations.RenameLockColumnMigration"/>
+                <bean class="com.jetbrains.licenseServer.model.impl.migrations.AddLicenseKeyIdMigration"/>
+                <bean class="com.jetbrains.licenseServer.model.impl.migrations.AddLicenseKeyIsUniqueConstraintMigration"/>
+                <bean class="com.jetbrains.licenseServer.model.impl.migrations.RenamePermanentColumnMigration"/>
+                <bean class="com.jetbrains.licenseServer.model.impl.migrations.EnlargeKeyColumnMigration"/>
+                <bean class="com.jetbrains.licenseServer.model.impl.migrations.GeneratedIdCounterMigration"/>
+            </list>
+        </property>
+        <!--<property name="targetVersion" value="13"/>-->
+    </bean>
+
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <bean id="licenseKeyDao" class="com.jetbrains.licenseServer.model.services.impl.jpa.LicenseKeyJpaDaoImpl"/>
+    <bean id="ticketDao" class="com.jetbrains.licenseServer.model.services.impl.jpa.TicketJpaDaoImpl"/>
+    <bean id="productFamilyDao" class="com.jetbrains.licenseServer.model.services.impl.ProductFamilyDaoImpl"/>
+    <bean id="optionsDao" class="com.jetbrains.licenseServer.model.services.impl.jpa.OptionsJpaDaoImpl"/>
+    <bean id="emailsDao" class="com.jetbrains.licenseServer.model.services.impl.jpa.EmailWhiteListJpaDaoImpl"/>
+    <bean id="permanentTicketActivationDao"
+          class="com.jetbrains.licenseServer.model.services.impl.jpa.PermanentTicketActivationDaoImpl"/>
+    <bean id="reportRecordJpaDao" class="com.jetbrains.licenseServer.model.services.impl.jpa.ReportRecordJpaDaoImpl"/>
+    <bean id="historyEntryDao" class="com.jetbrains.licenseServer.model.services.impl.jpa.HistoryEntryJpaDaoImpl"/>
+
+    <bean id="licenseKeyService" class="com.jetbrains.licenseServer.model.services.impl.LicenseKeyServiceImpl"/>
+    <bean id="ticketService" class="com.jetbrains.licenseServer.model.services.impl.TicketServiceImpl"/>
+    <bean id="clientService" class="com.jetbrains.licenseServer.services.impl.ClientServiceImpl"/>
+    <bean id="optionsService" class="com.jetbrains.licenseServer.model.services.impl.OptionsServiceImpl"/>
+    <bean id="emailService" class="com.jetbrains.licenseServer.services.impl.EmailServiceImpl"/>
+    <bean id="reportService" class="com.jetbrains.licenseServer.model.services.impl.ReportServiceImpl"/>
+
+    <bean id="pluginManager" class="com.jetbrains.licenseServer.model.services.impl.PluginManagerImpl"/>
+
+    <bean id="pluginConfigurator" class="com.jetbrains.licenseServer.plugins.PluginConfiguratorPostprocessor"/>
+
+    <bean id="periodicalTasksService" class="com.jetbrains.licenseServer.services.impl.PeriodicalTasksServiceImpl" init-method="init" destroy-method="shutdown"/>
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"/>
+
+    <bean id="historyAspect" class="com.jetbrains.licenseServer.model.aspect.HistoryAspect" scope="prototype">
+    </bean>
+
+    <!-- <bean id="nameVerifingAspect" class="com.jetbrains.licenseServer.model.NameVerifingAspect">
+    </bean>-->
+
+    <aop:config>
+        <aop:aspect id="hau" ref="historyAspect">
+            <aop:pointcut id="ticketUpdate"
+                          expression="execution(* com.jetbrains.licenseServer.model.services.TicketDao.update(..)) and args(ticket)"/>
+            <aop:after
+                    pointcut-ref="ticketUpdate"
+                    method="historyEntryInsert"/>
+        </aop:aspect>
+        <aop:aspect id="has" ref="historyAspect">
+            <aop:pointcut id="ticketSave"
+                          expression="execution(* com.jetbrains.licenseServer.model.services.TicketDao.save(..)) and args(ticket)"/>
+            <aop:after
+                    pointcut-ref="ticketSave"
+                    method="historyEntryInsert"/>
+        </aop:aspect>
+        <aop:aspect id="had" ref="historyAspect">
+            <aop:pointcut id="ticketDelete"
+                          expression="execution(* com.jetbrains.licenseServer.model.services.TicketDao.delete(..)) and args(ticket)"/>
+            <aop:after
+                    pointcut-ref="ticketDelete"
+                    method="historyEntryClose"/>
+        </aop:aspect>
+
+    </aop:config>
+
+    <bean id="historyService" class="com.jetbrains.licenseServer.model.services.impl.HistoryServiceImpl">
+        <property name="historyAllowed" value="false"/>
+    </bean>
+</beans>
