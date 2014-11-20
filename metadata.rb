@@ -1,7 +1,7 @@
 name             'jetbrains_license_server'
 maintainer       'Ryan Hass'
 maintainer_email 'ryan_hass@rapid7.com'
-license          'All rights reserved'
+license          'Apache 2.0'
 description      'Installs/Configures jetbrains_license_server'
 long_description 'Installs/Configures jetbrains_license_server'
 version          '0.1.0'
