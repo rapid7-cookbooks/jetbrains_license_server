@@ -19,7 +19,7 @@ describe 'jetbrains_license_server::licenseserver' do
 
   tomcat_versions.each do |version|
     context "on tomcat#{version}" do
-      let(:chef_run) {
+      cached(:chef_run) {
         ChefSpec::SoloRunner.new do |node|
           node.set['tomcat']['base_version'] = version
         end.converge(described_recipe) }
