@@ -17,5 +17,6 @@
 # limitations under the License.
 #
 
+include_recipe 'java::default'
 include_recipe 'tomcat::default'
 include_recipe 'jetbrains_license_server::licenseserver'
