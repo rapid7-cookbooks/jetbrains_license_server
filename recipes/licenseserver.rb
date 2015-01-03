@@ -63,6 +63,7 @@ template ::File.join(node['tomcat']['context_dir'], 'ROOT.xml') do
   owner node['tomcat']['user']
   group node['tomcat']['group']
   mode 0644
+  variables ({ :cbname => cookbook_name, :rname => recipe_name })
   notifies :restart, "service[tomcat#{node['tomcat']['base_version']}]", :delayed
   action node['jetbrains_license_server']['root_context_action']
 end
