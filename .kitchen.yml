@@ -16,16 +16,16 @@ suites:
       - recipe[jetbrains_license_server::default]
     attributes:
       tomcat:
-        version: 6
+        base_version: 6
   - name: tomcat7
     run_list:
       - recipe[jetbrains_license_server::default]
     attributes:
       tomcat:
-        version: 7
+        base_version: 7
   - name: tomcat8
     run_list:
       - recipe[jetbrains_license_server::default]
     attributes:
       tomcat:
-        version: 8
+        base_version: 8
