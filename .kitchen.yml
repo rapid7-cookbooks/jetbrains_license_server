@@ -11,7 +11,21 @@ platforms:
   - name: ubuntu-14.04
 
 suites:
-  - name: default
+  - name: tomcat6
     run_list:
       - recipe[jetbrains_license_server::default]
     attributes:
+      tomcat:
+        version: 6
+  - name: tomcat7
+    run_list:
+      - recipe[jetbrains_license_server::default]
+    attributes:
+      tomcat:
+        version: 7
+  - name: tomcat8
+    run_list:
+      - recipe[jetbrains_license_server::default]
+    attributes:
+      tomcat:
+        version: 8
