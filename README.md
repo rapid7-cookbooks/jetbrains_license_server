@@ -58,6 +58,12 @@ Installs the JetBrains License Server
     <td>Subdirectory name where the database lives</td>
     <td><tt>'derby'</tt></td>
   </tr>
+  <tr>
+    <td><tt>['jetbrains_license_server']['root_context_action']</tt></td>
+    <td>Symbol</td>
+    <td>Configure the licenseServer application as the root application. Set the value to :remove to disable.</td>
+    <td><tt>:create</tt></td>
+  </tr>
 </table>
 
 ### java

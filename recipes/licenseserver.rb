@@ -57,3 +57,12 @@ template ::File.join(node['tomcat']['webapp_dir'], node['jetbrains_license_serve
   notifies :restart, "service[tomcat#{node['tomcat']['base_version']}]", :immediately
   action :nothing
 end
+
+template ::File.join(node['tomcat']['context_dir'], 'ROOT.xml') do
+  source 'ROOT.xml.erb'
+  owner node['tomcat']['user']
+  group node['tomcat']['group']
+  mode 0644
+  notifies :restart, "service[tomcat#{node['tomcat']['base_version']}]", :delayed
+  action node['jetbrains_license_server']['root_context_action']
+end

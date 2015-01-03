@@ -32,7 +32,7 @@ describe 'jetbrains_license_server::licenseserver' do
       let(:unzip_command) { chef_run.execute('unzip_licserv') }
       let(:mc_template)   { chef_run.template(::File.join(chef_run.node['tomcat']['webapp_dir'],                                                   chef_run.node['jetbrains_license_server']['modelContext_path'])) }
       let(:tomcat_svc)    { chef_run.service(tomcat_ver) }
-
+      let(:rc_template)   { chef_run.template(::File.join(node['tomcat']['context_dir'], 'ROOT.xml')) }
 
       it 'installs unzip' do
         expect(chef_run).to install_package('unzip')
@@ -69,8 +69,12 @@ describe 'jetbrains_license_server::licenseserver' do
         expect(mc_template).to subscribe_to('execute[unzip_licserv]')
       end
 
-      it 'notfies tomcat to restart when the template is deployed' do
+      it 'notifies tomcat to restart when the template is deployed' do
         expect(mc_template).to notify("service[#{tomcat_ver}]").to(:restart).immediately
+      end
+
+      it 'configures the licenseServer as the root context' do
+        expect(chef_run).to create_template(::File.join(chef_run.node['tomcat']['context_dir'], 'ROOT.xml'))
       end
 
     end

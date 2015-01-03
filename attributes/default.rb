@@ -21,3 +21,4 @@ default['jetbrains_license_server']['download']['file_suffix'] = 'zip'
 default['jetbrains_license_server']['checksum'] = 'a3935a2fdd644d780b30f05855c9d1b0b0582be1ad92919df40a0c3fd7ff33a1'
 default['jetbrains_license_server']['modelContext_path'] = 'licenseServer/WEB-INF/classes/META-INF/modelContext.xml'
 default['jetbrains_license_server']['derby_dir'] = 'derby'
+default['jetbrains_license_server']['root_context_action'] = :create
