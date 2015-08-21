@@ -1,4 +1,8 @@
 # jetbrains_license_server-cookbook
+[![Build Status](https://travis-ci.org/rapid7-cookbooks/jetbrains_license_server.svg)](https://travis-ci.org/rapid7-cookbooks/jetbrains_license_server)
+[![Cookbook Version](https://img.shields.io/cookbook/v/jetbrains_license_server.svg)](https://supermarket.chef.io/cookbooks/jetbrains_license_server)
+[![License](https://img.shields.io/badge/license-Apache_2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+
 
 Installs the JetBrains License Server
 
