@@ -1,8 +1,9 @@
 ---
 driver:
-  name: vagrant
-  network:
-    - ["forwarded_port", {guest: 8080, host: 8080}]
+  name: docker
+
+driver_config:
+  foward: 8080
 
 provisioner:
   name: chef_solo
